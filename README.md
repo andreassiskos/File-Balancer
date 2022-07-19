@@ -20,3 +20,10 @@ A File Balancer written in FastAPI
 3. Open a Browser and go to:
   http://127.0.0.1:8000 or go to http://127.0.0.1:8000/docs to use it through the swagger UI
   
+## TODO:
+
+1. Make a Docker Container
+2. Make a nice web interface
+3. Test it in cloud
+4. Use database instead of directories
+5. Use kubernetes

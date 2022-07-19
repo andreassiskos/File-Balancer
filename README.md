@@ -18,5 +18,5 @@ A File Balancer written in FastAPI
 2. Type:
   python -m uvicorn app:app --reload
 3. Open a Browser and go to:
-  http://127.0.0.1:8000
+  http://127.0.0.1:8000 or go to http://127.0.0.1:8000/docs to use it through the swagger UI
   

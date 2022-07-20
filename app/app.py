@@ -10,7 +10,7 @@ from datetime import date
 app = FastAPI()
 FILE_DIRECTORY = "saved_files/"
 EXTENTION_OF_DIR = ""
-ACCEPTED_FILENAMES = ["txt", "yaml"]
+ACCEPTED_FILENAMES = ["txt", "yaml", "pdf"]
 ACCEPTED_VALUE = True
 
 def add_date():
@@ -25,10 +25,10 @@ def distribute_file_based_on_filename(filename):
     if(len(splited_name) == 1 and "" not in ACCEPTED_FILENAMES):
         return splited_name[0] , False
     
-    if(splited_name[1] not in ACCEPTED_FILENAMES):
+    if(splited_name[-1] not in ACCEPTED_FILENAMES):
         return splited_name[0] , False
 
-    return str(splited_name[1]) + "/" , True
+    return str(splited_name[-1]) + "/" , True
 
 def check_and_create_directory(dirname):
 

@@ -1,9 +1,10 @@
 from fileinput import filename
 from itertools import count
 from pickle import TRUE
+from tokenize import String
 from typing import List
-from fastapi import FastAPI, File, UploadFile
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, File, UploadFile, Query
+from fastapi.responses import HTMLResponse, FileResponse
 import os.path 
 from datetime import date
 
@@ -68,6 +69,10 @@ async def create_upload_files(files: List[UploadFile]):
     return {"Accepted_filenames": [file.filename for file in accepted_files],
             "Rejected_filenames": [file.filename for file in not_accepted_files]}
 
+
+@app.get("/getfiles/", response_class=FileResponse)
+async def get_files(q: list = Query(default=[])):
+    return "saved_files/txt/07-2022/hello.txt"
 
 @app.get("/")
 async def main():

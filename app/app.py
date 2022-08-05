@@ -3,16 +3,44 @@ from itertools import count
 from pickle import TRUE
 from tokenize import String
 from typing import List
-from fastapi import FastAPI, File, UploadFile, Query
+from fastapi import FastAPI, File, UploadFile, Query, Response
 from fastapi.responses import HTMLResponse, FileResponse
 import os.path 
 from datetime import date
+import os
+import zipfile
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
+
 
 app = FastAPI()
 FILE_DIRECTORY = "saved_files/"
 EXTENTION_OF_DIR = ""
 ACCEPTED_FILENAMES = ["txt", "yaml", "pdf"]
 ACCEPTED_VALUE = True
+
+
+
+def zipfiles(filenames):
+    
+    s = StringIO()
+    with zipfile.ZipFile(s, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+        zf.write(filenames)
+
+    with open('/local/my_files/my_file.zip', 'wb') as f_out:
+        f_out.write(s.getvalue())
+
+    # Must close zip for all contents to be written
+    zf.close()
+
+    # Grab ZIP file from in-memory, make response with correct MIME-type
+    resp = Response(s.getvalue(), mimetype = "application/x-zip-compressed")
+    # ..and correct content-disposition
+    resp['Content-Disposition'] = 'attachment; filename=%s' % zip_filename
+
+    return resp
 
 def add_date():
     today = date.today()
@@ -72,7 +100,16 @@ async def create_upload_files(files: List[UploadFile]):
 
 @app.get("/getfiles/", response_class=FileResponse)
 async def get_files(q: list = Query(default=[])):
-    return "saved_files/txt/07-2022/hello.txt"
+    return "saved_files/pdf/07-2022/"
+
+
+@app.get("/image_from_id/")
+async def image_from_id(image_id: int):
+
+    # Get image from the database
+    img = "saved_files/txt/08-2022/requirements.txt"
+    return zipfiles(img)
+
 
 @app.get("/")
 async def main():
